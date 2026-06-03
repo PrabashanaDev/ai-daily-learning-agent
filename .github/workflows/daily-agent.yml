@@ -1,0 +1,34 @@
+name: Daily AI Agent
+
+# Run at 10:00 AM UTC every day, and allow manual triggering
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+# Give the action permission to push code to the repo
+permissions:
+  contents: write
+
+jobs:
+  run-ai-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install python-dotenv google-genai
+
+      - name: Run AI Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python agent.py
+
+      - name: Push Changes back to GitHub
+        run: git push
