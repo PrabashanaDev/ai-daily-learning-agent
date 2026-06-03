@@ -27,12 +27,19 @@ jobs:
           python-version: '3.10'
 
       - name: Install Dependencies
-        run: pip install python-dotenv google-genai
+        # Added 'requests' for the Dev.to API
+        run: pip install python-dotenv google-genai requests
 
-      - name: Run AI Agent
+      - name: Run AI Agent (Creates the Note)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python agent.py
 
       - name: Push Changes back to GitHub
         run: git push
+
+      - name: Run Publisher Agent (Creates the Blog Draft)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DEV_TO_API_KEY: ${{ secrets.DEV_TO_API_KEY }}
+        run: python publisher.py
