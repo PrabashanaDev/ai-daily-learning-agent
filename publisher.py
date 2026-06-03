@@ -10,12 +10,17 @@ dev_to_key = os.environ.get("DEV_TO_API_KEY")
 
 client = genai.Client()
 
-# 2. Read the latest short tip from your file
+# 2. Read ONLY the latest tip from your file
 with open("AI_NOTES.md", "r", encoding="utf-8") as file:
-    # Get the last 500 characters to grab the most recent tip
-    latest_tip = file.read()[-500:] 
+    content = file.read()
+    
+    # Split the document every time the header appears
+    all_tips = content.split("### Tip for")
+    
+    # Grab the very last item in the list (the newest one) and add the header text back
+    latest_tip = "### Tip for" + all_tips[-1]
 
-print("🤖 Agent 1: Expanding the daily note into a full draft...")
+print(f"📄 Found the latest tip. Length: {len(latest_tip)} characters.")
 
 # 3. Prompt Gemini to act as a Technical Writer
 prompt = f"""
