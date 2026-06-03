@@ -6,6 +6,10 @@ on:
     - cron: '0 10 * * *'
   workflow_dispatch:
 
+# Add this environment variable to silence the Node 20 warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 # Give the action permission to push code to the repo
 permissions:
   contents: write
